@@ -18,18 +18,13 @@ using Polly.Retry;
 
 using Newtonsoft.Json;
 
-
-public interface IFundaService
-{
-    Task<List<FundaObject>> FetchDataAsync(string? search, string? type, int pageSize, int currentPage);
-}
-
 public class FundaService : IFundaService
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly FundaOptions _options;
     private readonly AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
     private readonly SemaphoreSlim _semaphore; // Max 5 concurrent calls
+    private int _pageSize;
 
     public FundaService(IHttpClientFactory httpClientFactory, IOptions<FundaOptions> options)
     {
@@ -42,13 +37,16 @@ public class FundaService : IFundaService
                 retryAttempt => TimeSpan.FromSeconds(_options.RetryDelaySeconds));
 
         _semaphore = new SemaphoreSlim(_options.SemaphoreLimit);
+
+        _pageSize = _options.PageSize;
     }
 
-    public async Task<List<FundaObject>> FetchDataAsync(string? search, string? type, int pageSize, int currentPage)
+    public async Task<List<FundaObject>> FetchDataAsync(string? search, string? type, int? numberOfListings)
     {
         var allObjects = new List<FundaObject>();
+        var currentPage = 1;
 
-        var initialResponse = await FetchPageAsync(search, type, currentPage, pageSize);
+        var initialResponse = await FetchPageAsync(search, type, currentPage, _pageSize);
         var result = JsonConvert.DeserializeObject<FundaApiResponse>(initialResponse);
 
         allObjects.AddRange(result.Objects);
@@ -56,7 +54,7 @@ public class FundaService : IFundaService
 
         var tasks = new List<Task>();
 
-        for (int page = 2; page <= totalPages; page++)
+        for (int page = 2; page <= totalPages && allObjects.Count < numberOfListings; page++)
         {
             var capturedPage = page;
             tasks.Add(Task.Run(async () =>
@@ -64,7 +62,7 @@ public class FundaService : IFundaService
                 await _semaphore.WaitAsync();
                 try
                 {
-                    var response = await FetchPageAsync(search, type, capturedPage, pageSize);
+                    var response = await FetchPageAsync(search, type, capturedPage, _pageSize);
                     var data = JsonConvert.DeserializeObject<FundaApiResponse>(response);
                     lock (allObjects)
                     {
