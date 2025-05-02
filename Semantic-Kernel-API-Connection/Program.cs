@@ -87,7 +87,7 @@ var openAIPromptExecutionSettings = new OpenAIPromptExecutionSettings
     FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
     Temperature = 0,
     TopP = 1,
-    MaxTokens = 300
+    MaxTokens = 1000
 };
 
 KernelArguments kernelArguments;
