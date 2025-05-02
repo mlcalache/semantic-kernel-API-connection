@@ -1,19 +1,6 @@
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using Polly;
-using Polly.Extensions.Http;
-
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.RateLimiting;
 using Microsoft.Extensions.Options;
 using Polly;
-using Polly.RateLimit;
 using Polly.Retry;
 
 using Newtonsoft.Json;
@@ -41,20 +28,21 @@ public class FundaService : IFundaService
         _pageSize = _options.PageSize;
     }
 
-    public async Task<List<FundaObject>> FetchDataAsync(string? search, string? type, int? numberOfListings)
+    public async Task<ServiceResponse> FetchDataAsync(string? search, string? type, int? numberOfListings)
     {
-        var allObjects = new List<FundaObject>();
+        var serviceResponse = new ServiceResponse();
         var currentPage = 1;
 
         var initialResponse = await FetchPageAsync(search, type, currentPage, _pageSize);
         var result = JsonConvert.DeserializeObject<FundaApiResponse>(initialResponse);
 
-        allObjects.AddRange(result.Objects);
+        serviceResponse.Objects.AddRange(result.Objects);
+        serviceResponse.TotalObjects = result.TotaalAantalObjecten;
         int totalPages = result.Paging.AantalPaginas;
 
         var tasks = new List<Task>();
 
-        for (int page = 2; page <= totalPages && allObjects.Count < numberOfListings; page++)
+        for (int page = 2; page <= totalPages && serviceResponse.Objects.Count < numberOfListings; page++)
         {
             var capturedPage = page;
             tasks.Add(Task.Run(async () =>
@@ -64,9 +52,9 @@ public class FundaService : IFundaService
                 {
                     var response = await FetchPageAsync(search, type, capturedPage, _pageSize);
                     var data = JsonConvert.DeserializeObject<FundaApiResponse>(response);
-                    lock (allObjects)
+                    lock (serviceResponse.Objects)
                     {
-                        allObjects.AddRange(data.Objects);
+                        serviceResponse.Objects.AddRange(data.Objects);
                     }
                 }
                 catch (Exception ex)
@@ -81,7 +69,8 @@ public class FundaService : IFundaService
         }
 
         await Task.WhenAll(tasks);
-        return allObjects;
+
+        return serviceResponse;
     }
 
     private async Task<string> FetchPageAsync(string search, string type, int currentPage, int pageSize)

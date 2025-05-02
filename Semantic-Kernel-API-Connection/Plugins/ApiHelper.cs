@@ -17,7 +17,7 @@ public class ApiHelper : IApiHelper
     
     [KernelFunction("get_specific_number_of_listings")]
     [Description("Get a specific number of listings from the Funda API")]
-    public List<FundaObject> GetAllListings(
+    public ServiceResponse GetAllListings(
         [Description("Type of listing, e.g., koop or huur")] string type, 
         [Description("Search location or filter path, e.g., /Amsterdam/Tuin")] string search,
         [Description("Number of listings")] int numberOfListings)
@@ -28,7 +28,7 @@ public class ApiHelper : IApiHelper
 
     [KernelFunction("get_all_listings")]
     [Description("Get all listings from the Funda API")]
-    public List<FundaObject> GetListings(
+    public ServiceResponse GetListings(
         [Description("Type of listing, e.g., koop or huur")] string type, 
         [Description("Search location or filter path, e.g., /Amsterdam/Tuin")] string search)
     {
