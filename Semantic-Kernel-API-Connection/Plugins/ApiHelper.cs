@@ -15,14 +15,24 @@ public class ApiHelper : IApiHelper
         _searchService = searchService;
     }
     
-    [KernelFunction("get_all_listings")]
-    [Description("Get listings from the Funda API")]
+    [KernelFunction("get_specific_number_of_listings")]
+    [Description("Get a specific number of listings from the Funda API")]
     public List<FundaObject> GetAllListings(
         [Description("Type of listing, e.g., koop or huur")] string type, 
         [Description("Search location or filter path, e.g., /Amsterdam/Tuin")] string search,
         [Description("Number of listings")] int numberOfListings)
     {
-        //var result = await fundaService.FetchDataAsync(type: "koop", search: "/Amsterdam/Tuin", currentPage: 1, pageSize: 25);
-        return _searchService.FetchDataAsync(search, type, numberOfListings).Result;
+        var result = _searchService.FetchDataAsync(search, type, numberOfListings).Result;
+        return result;
+    }
+
+    [KernelFunction("get_all_listings")]
+    [Description("Get all listings from the Funda API")]
+    public List<FundaObject> GetListings(
+        [Description("Type of listing, e.g., koop or huur")] string type, 
+        [Description("Search location or filter path, e.g., /Amsterdam/Tuin")] string search)
+    {
+        var result = _searchService.FetchDataAsync(search, type, null).Result;
+        return result;
     }
 }
