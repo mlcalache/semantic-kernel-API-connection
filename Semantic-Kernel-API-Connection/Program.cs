@@ -92,10 +92,29 @@ var openAIPromptExecutionSettings = new OpenAIPromptExecutionSettings
 
 KernelArguments kernelArguments;
 
+Console.ForegroundColor = ConsoleColor.Cyan;
+Console.WriteLine("=================================================");
+Console.WriteLine("                 Search a Home                   ");
+Console.WriteLine("=================================================");
+Console.ForegroundColor = ConsoleColor.Yellow;
+
+Console.WriteLine();
+Console.WriteLine("       /\\            /\\            /\\       ");
+Console.WriteLine("      /  \\          /  \\          /  \\      ");
+Console.WriteLine("     /____\\        /____\\        /____\\     ");
+Console.WriteLine("    | .--. |      | .--. |      | .--. |    ");
+Console.WriteLine("    | |  | |      | |[]| |      | |  | |    ");
+Console.WriteLine("    | |__| |      | |__| |      | |__| |    ");
+Console.WriteLine("    |      |      |      |      |      |    ");
+Console.WriteLine("    |  []  |      |  []  |      |  []  |    ");
+Console.WriteLine("    |______|      |______|      |______|    ");
+Console.WriteLine();
+
 // Start the chat loop
 string? userInput;
 do
 {
+
     Console.ForegroundColor = ConsoleColor.White;
     Console.Write("User > ");
     userInput = Console.ReadLine();
