@@ -11,59 +11,6 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 
-// var builder = Host.CreateDefaultBuilder(args)
-//     .ConfigureLogging(logging =>
-//     {
-//         logging.ClearProviders(); // Remove all default logging providers
-//         logging.SetMinimumLevel(LogLevel.None); // Disable all logging
-//     })
-//     .ConfigureAppConfiguration((context, config) =>
-//     {
-//         var appSettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
-//         config.AddJsonFile(appSettingsPath, optional: false, reloadOnChange: true);
-//         config.AddUserSecrets<Program>();
-//     })
-//     .ConfigureServices((context, services) =>
-//     {
-//         // Bind FundaOptions from configuration
-//         services.Configure<FundaOptions>(context.Configuration.GetSection("Funda"));
-//         var fundaOptions = context.Configuration.GetSection("Funda").Get<FundaOptions>();
-
-//         // Bind SemanticKernelOptions from configuration
-//         services.Configure<SemanticKernelOptions>(context.Configuration.GetSection("SemanticKernel"));
-//         var skOptions = context.Configuration.GetSection("SemanticKernel").Get<SemanticKernelOptions>();
-
-//         // Register HttpClient with Polly retry policy
-//         services.AddHttpClient("FundaClient")
-//             .AddPolicyHandler(HttpPolicyExtensions
-//                 .HandleTransientHttpError()
-//                 .WaitAndRetryAsync(
-//                     retryCount: fundaOptions.RetryCount,
-//                     sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(fundaOptions.RetryDelaySeconds)
-//                 ));
-
-//         // Register FundaService and ApiHelper
-//         services.AddSingleton<IFundaService, FundaService>();
-//         services.AddSingleton<IFundaApiHelper, FundaApiHelper>();
-
-//         // Semantic Kernel
-//         var kernelBuilder = Kernel.CreateBuilder();
-//         kernelBuilder.AddAzureOpenAIChatCompletion(
-//             deploymentName: skOptions.ModelId,
-//             endpoint: skOptions.Endpoint,
-//             apiKey: skOptions.ApiKey);
-//         var kernel = kernelBuilder.Build();
-
-//         // Add ApiHelper as a plugin to the kernel
-//         var provider = services.BuildServiceProvider();
-//         var apiHelper = provider.GetRequiredService<IFundaApiHelper>();
-//         kernel.Plugins.AddFromObject(apiHelper, "ApiHelper");
-
-//         services.AddSingleton(kernel);
-//     });
-
-// var app = builder.Build();
-
 var app = KernelHostBuilder.Build(args);
 
 using var scope = app.Services.CreateScope();

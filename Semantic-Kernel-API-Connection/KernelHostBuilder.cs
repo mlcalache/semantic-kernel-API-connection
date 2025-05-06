@@ -32,6 +32,9 @@ public static class KernelHostBuilder
                 services.Configure<FundaOptions>(context.Configuration.GetSection("Funda"));
                 var fundaOptions = context.Configuration.GetSection("Funda").Get<FundaOptions>();
 
+                services.Configure<WeatherOptions>(context.Configuration.GetSection("Weather"));
+                // var weatherOptions = context.Configuration.GetSection("Weather").Get<WeatherOptions>();
+
                 services.Configure<SemanticKernelOptions>(context.Configuration.GetSection("SemanticKernel"));
                 var skOptions = context.Configuration.GetSection("SemanticKernel").Get<SemanticKernelOptions>();
 
@@ -44,7 +47,9 @@ public static class KernelHostBuilder
                         ));
 
                 services.AddSingleton<IFundaService, FundaService>();
+                services.AddSingleton<IWeatherService, WeatherService>();
                 services.AddSingleton<IFundaApiHelper, FundaApiHelper>();
+                services.AddSingleton<IWeatherApiHelper, WeatherApiHelper>();
 
                 var kernelBuilder = Kernel.CreateBuilder();
                 kernelBuilder.AddAzureOpenAIChatCompletion(
@@ -55,8 +60,10 @@ public static class KernelHostBuilder
 
                 // Build intermediate service provider to resolve plugin dependency
                 var provider = services.BuildServiceProvider();
-                var apiHelper = provider.GetRequiredService<IFundaApiHelper>();
-                kernel.Plugins.AddFromObject(apiHelper, "ApiHelper");
+                var fundaApiHelper = provider.GetRequiredService<IFundaApiHelper>();
+                kernel.Plugins.AddFromObject(fundaApiHelper, "FundaApiHelper");
+                var weatherApiHelper = provider.GetRequiredService<IWeatherApiHelper>();
+                kernel.Plugins.AddFromObject(weatherApiHelper, "WeatherApiHelper");
 
                 services.AddSingleton(kernel);
             })
