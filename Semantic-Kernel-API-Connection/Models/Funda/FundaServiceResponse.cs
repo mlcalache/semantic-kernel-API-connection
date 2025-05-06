@@ -6,7 +6,7 @@ using Microsoft.SemanticKernel;
 using System.Text;
 using System.Text.Json;
 
-public class ServiceResponse
+public class FundaServiceResponse
 {
     [JsonPropertyName("Objects")]
     [Description("The listings (objects) found by the service.")]
@@ -16,7 +16,7 @@ public class ServiceResponse
     [Description("The total number of listings found by the service.")]
     public int TotalObjects { get; set; }
 
-    public ServiceResponse()
+    public FundaServiceResponse()
     {
         Objects = new List<FundaObject>();
     }

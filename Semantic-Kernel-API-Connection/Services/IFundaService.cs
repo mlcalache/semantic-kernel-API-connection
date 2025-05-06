@@ -1,5 +1,5 @@
 
 public interface IFundaService
 {
-    Task<ServiceResponse> FetchDataAsync(string? search, string? type, int? numberOfListings);
+    Task<FundaServiceResponse> FetchDataAsync(string? search, string? type, int? numberOfListings);
 }

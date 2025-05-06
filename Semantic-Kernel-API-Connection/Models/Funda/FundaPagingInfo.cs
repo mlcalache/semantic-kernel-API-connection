@@ -6,7 +6,7 @@ using Microsoft.SemanticKernel;
 using System.Text;
 using System.Text.Json;
 
-public class PagingInfo
+public class FundaPagingInfo
 {
     [JsonPropertyName("AantalPaginas")]
     [Description("Total number of pages, considering the page size and the total number of objets found in the search.")]

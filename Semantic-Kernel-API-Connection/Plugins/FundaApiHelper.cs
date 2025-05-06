@@ -6,18 +6,18 @@ using Microsoft.SemanticKernel;
 using System.Text;
 using System.Text.Json;
 
-public class ApiHelper : IApiHelper
+public class FundaApiHelper : IFundaApiHelper
 {
     private readonly IFundaService _searchService;
 
-    public ApiHelper(IFundaService searchService)
+    public FundaApiHelper(IFundaService searchService)
     {
         _searchService = searchService;
     }
     
     [KernelFunction("get_specific_number_of_listings")]
     [Description("Get a specific number of listings from the Funda API")]
-    public ServiceResponse GetAllListings(
+    public FundaServiceResponse GetAllListings(
         [Description("Type of listing, e.g., koop or huur")] string type, 
         [Description("Search location or filter path, e.g., /Amsterdam/Tuin")] string search,
         [Description("Number of listings")] int numberOfListings)
@@ -28,7 +28,7 @@ public class ApiHelper : IApiHelper
 
     [KernelFunction("get_all_listings")]
     [Description("Get all listings from the Funda API")]
-    public ServiceResponse GetListings(
+    public FundaServiceResponse GetListings(
         [Description("Type of listing, e.g., koop or huur")] string type, 
         [Description("Search location or filter path, e.g., /Amsterdam/Tuin")] string search)
     {

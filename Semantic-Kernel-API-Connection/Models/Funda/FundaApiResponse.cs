@@ -14,7 +14,7 @@ public class FundaApiResponse
     
     [JsonPropertyName("Paging")]
     [Description("The information about paging for the results of the objects found in the API.")]
-    public PagingInfo Paging { get; set; }
+    public FundaPagingInfo Paging { get; set; }
     
     [JsonPropertyName("TotaalAantalObjecten")]
     [Description("The total number of listings found in the API.")]

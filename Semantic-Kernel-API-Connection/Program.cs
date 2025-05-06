@@ -44,7 +44,7 @@ var builder = Host.CreateDefaultBuilder(args)
 
         // Register FundaService and ApiHelper
         services.AddSingleton<IFundaService, FundaService>();
-        services.AddSingleton<IApiHelper, ApiHelper>();
+        services.AddSingleton<IFundaApiHelper, FundaApiHelper>();
 
         // Semantic Kernel
         var kernelBuilder = Kernel.CreateBuilder();
@@ -56,7 +56,7 @@ var builder = Host.CreateDefaultBuilder(args)
 
         // Add ApiHelper as a plugin to the kernel
         var provider = services.BuildServiceProvider();
-        var apiHelper = provider.GetRequiredService<IApiHelper>();
+        var apiHelper = provider.GetRequiredService<IFundaApiHelper>();
         kernel.Plugins.AddFromObject(apiHelper, "ApiHelper");
 
         services.AddSingleton(kernel);

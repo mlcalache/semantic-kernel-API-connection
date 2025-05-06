@@ -28,9 +28,9 @@ public class FundaService : IFundaService
         _pageSize = _options.PageSize;
     }
 
-    public async Task<ServiceResponse> FetchDataAsync(string? search, string? type, int? numberOfListings)
+    public async Task<FundaServiceResponse> FetchDataAsync(string? search, string? type, int? numberOfListings)
     {
-        var serviceResponse = new ServiceResponse();
+        var serviceResponse = new FundaServiceResponse();
         var currentPage = 1;
 
         var initialResponse = await FetchPageAsync(search, type, currentPage, _pageSize);
