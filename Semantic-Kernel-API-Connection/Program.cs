@@ -63,7 +63,6 @@ Console.WriteLine();
 string? userInput;
 do
 {
-
     Console.ForegroundColor = ConsoleColor.White;
     Console.Write("User > ");
     userInput = Console.ReadLine();
