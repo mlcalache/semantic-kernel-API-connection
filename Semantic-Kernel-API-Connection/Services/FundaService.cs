@@ -42,7 +42,18 @@ public class FundaService : IFundaService
 
         var tasks = new List<Task>();
 
-        for (int page = 2; page <= totalPages && serviceResponse.Objects.Count < numberOfListings; page++)
+        var totalObjectsInResponse = serviceResponse.Objects.Count;
+        if (numberOfListings != null)
+        {
+            if (totalObjectsInResponse > numberOfListings)
+            {
+                int intNumberOfListings = (int)numberOfListings;
+                serviceResponse.Objects.RemoveRange(intNumberOfListings - 1, totalObjectsInResponse - intNumberOfListings);
+            }
+            return serviceResponse;
+        }
+
+        for (int page = 2; page <= totalPages; page++)
         {
             var capturedPage = page;
             tasks.Add(Task.Run(async () =>

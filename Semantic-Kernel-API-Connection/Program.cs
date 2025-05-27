@@ -1,12 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Polly;
-using Polly.Extensions.Http;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -19,9 +11,10 @@ using var scope = app.Services.CreateScope();
 var kernel = scope.ServiceProvider.GetRequiredService<Kernel>();
 var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
-// Example of the FundaService use, to call the API
+// Example of use
 // var fundaService = scope.ServiceProvider.GetRequiredService<IFundaService>();
-// var resultFundaService = await fundaService.FetchDataAsync(type: "koop", search: "/Amsterdam/Tuin", currentPage: 1, pageSize: 25);
+// var resultFundaService = await fundaService.FetchDataAsync("/Amsterdam/Tuin", "koop", null);
+// var resultFundaService2 = await fundaService.FetchDataAsync("/Amsterdam/Tuin", "koop", 25);
 
 // Create a chat history
 var history = new ChatHistory();
